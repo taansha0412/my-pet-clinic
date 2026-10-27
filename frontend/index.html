@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Paws and Care Clinic</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
-    <h1><a href="#" data-go="home">Paws and Care</a></h1>
+    <h1><a href="#" data-go="home">🐾 Paws and Care</a></h1>
     <div id="session"></div>
   </header>
 
@@ -19,56 +19,97 @@
     <!-- Home: choose who you are -->
     <section id="view-home">
       <h2>Welcome to Paws and Care</h2>
-      <p>Choose how you want to continue.</p>
+      <p>Please select your portal to continue:</p>
       <div class="choices">
-        <button class="choice" data-go="owner"><strong>Pet owner</strong><span>Register your pet and get a visit time</span></button>
-        <button class="choice alt" data-go="vet"><strong>Vet</strong><span>Log in and manage waiting pets</span></button>
+        <button class="choice" data-go="owner">
+          <strong>🐶 Pet Owner</strong>
+          <span>Register your pet, get your ID, and see your visit time</span>
+        </button>
+        <button class="choice alt" data-go="vet">
+          <strong>🩺 Veterinarian</strong>
+          <span>Log in to review and approve appointment timings</span>
+        </button>
       </div>
     </section>
 
     <!-- Pet owner -->
     <section id="view-owner" hidden>
-      <div class="panel">
+      <!-- Active Pet Status Card -->
+      <div id="status-card" class="panel status-panel" hidden>
+        <!-- Populated dynamically by app.js -->
+      </div>
+
+      <!-- Registration Panel -->
+      <div id="register-panel" class="panel">
         <h2>Register your pet</h2>
+        <p>Enter your details below. You will immediately receive a <strong>Pet ID</strong> to track your visit approval.</p>
         <form id="pet-form">
-          <label>Pet name <input name="pet_name" required maxlength="100"></label>
-          <label>Owner name <input name="owner_name" required maxlength="100"></label>
-          <button type="submit">Register</button>
+          <label>Pet name
+            <input name="pet_name" required maxlength="100" placeholder="e.g. Milo, Bella">
+          </label>
+          <label>Owner name
+            <input name="owner_name" required maxlength="100" placeholder="e.g. Alice Smith">
+          </label>
+          <button type="submit">Register &amp; Get Pet ID</button>
         </form>
       </div>
 
-      <div class="panel">
-        <h2>Check your pet</h2>
+      <!-- Check Existing Status Panel -->
+      <div id="check-panel" class="panel">
+        <h2>Already have a Pet ID?</h2>
+        <p>Enter your assigned Pet ID to check current status and visit timing.</p>
         <form id="status-form" class="inline">
-          <label>Pet ID <input name="id" type="number" min="1" required></label>
-          <button type="submit">Check</button>
+          <label>Pet ID
+            <input name="id" type="number" min="1" required placeholder="e.g. 1">
+          </label>
+          <button type="submit">Check Status</button>
         </form>
-        <div id="status-card" hidden></div>
       </div>
-      <button class="link" data-go="home">Back to home</button>
+
+      <button class="link" data-go="home">&larr; Back to home</button>
     </section>
 
     <!-- Vet login -->
     <section id="view-vet" hidden>
       <div class="panel narrow">
-        <h2>Vet login</h2>
+        <h2>Vet Login</h2>
+        <p class="muted">Enter your veterinarian credentials to continue.</p>
+        <div id="vet-login-error" class="error-box" hidden></div>
         <form id="login-form">
-          <label>Name <input name="name" required autocomplete="username"></label>
-          <label>Password <input name="password" type="password" required autocomplete="current-password"></label>
-          <button type="submit">Log in</button>
+          <label>Name
+            <input name="name" required autocomplete="username" placeholder="e.g. Meera or Arjun">
+          </label>
+          <label>Password
+            <input name="password" type="password" required autocomplete="current-password" placeholder="Password">
+          </label>
+          <button type="submit">Log In</button>
         </form>
+        <p class="hint">Predefined logins: <strong>Meera</strong> (<code>meera123</code>) or <strong>Arjun</strong> (<code>arjun123</code>)</p>
       </div>
-      <button class="link" data-go="home">Back to home</button>
+      <button class="link" data-go="home">&larr; Back to home</button>
     </section>
 
     <!-- Vet dashboard -->
     <section id="view-dash" hidden>
+      <div class="dash-header">
+        <h2>Veterinarian Dashboard</h2>
+        <p class="muted">Review waiting pets, assign date &amp; timing, and manage approved appointments.</p>
+      </div>
+
       <div class="panel">
-        <h2>Waiting for a time</h2>
+        <div class="panel-header">
+          <h2>Pets Waiting for Approval</h2>
+          <span id="pending-count" class="counter">0 waiting</span>
+        </div>
+        <p class="muted">Set an appointment date &amp; timing, then click <strong>Approve</strong> to confirm the visit.</p>
         <ul id="pending" class="plain"></ul>
       </div>
+
       <div class="panel">
-        <h2>Approved</h2>
+        <div class="panel-header">
+          <h2>Approved Visits</h2>
+          <span id="approved-count" class="counter done">0 approved</span>
+        </div>
         <ul id="approved" class="plain"></ul>
       </div>
     </section>

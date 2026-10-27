@@ -5,11 +5,18 @@ $action = $_GET['action'] ?? '';
 
 if ($action === 'login') {
     $b = body();
-    $st = db()->prepare('SELECT id, name, password_hash FROM vets WHERE name = ?');
-    $st->execute([trim($b['name'] ?? '')]);
-    $v = $st->fetch();
-    if (!$v || !password_verify($b['password'] ?? '', $v['password_hash']))
+    $name = trim($b['name'] ?? '');
+    $password = (string)($b['password'] ?? '');
+    if ($name === '' || $password === '') {
         out(['error' => 'Wrong name or password'], 401);
+    }
+
+    $st = db()->prepare('SELECT id, name, password_hash FROM vets WHERE BINARY name = BINARY ?');
+    $st->execute([$name]);
+    $v = $st->fetch();
+    if (!$v || !password_verify($password, $v['password_hash'])) {
+        out(['error' => 'Wrong name or password'], 401);
+    }
     session_regenerate_id(true);
     $_SESSION['vet_id'] = (int)$v['id'];
     $_SESSION['vet_name'] = $v['name'];
@@ -17,7 +24,10 @@ if ($action === 'login') {
 }
 
 if ($action === 'logout') {
-    session_destroy();
+    $_SESSION = [];
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_destroy();
+    }
     out(['ok' => true]);
 }
 

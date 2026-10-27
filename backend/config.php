@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Kolkata');
 header('Content-Type: application/json');
 
 function db(): PDO {
@@ -26,9 +27,13 @@ function out($data, int $code = 200): void {
     exit;
 }
 
+function need_vet(): int {
+    if (empty($_SESSION['vet_id'])) out(['error' => 'Log in to continue'], 401);
+    return (int)$_SESSION['vet_id'];
+}
+
 function need_login(): int {
-    if (empty($_SESSION['uid'])) out(['error' => 'Log in to continue'], 401);
-    return (int)$_SESSION['uid'];
+    return need_vet();
 }
 
 set_exception_handler(function ($e) {

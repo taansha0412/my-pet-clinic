@@ -26,7 +26,7 @@ Plain HTML, CSS and JavaScript frontend with a PHP and MySQL backend.
 | Meera | meera123 |
 | Arjun | arjun123 |
 
-Change these before sharing the site. To add a vet, generate a hash with `php -r "echo password_hash('newpass', PASSWORD_DEFAULT);"` and insert it into the `vets` table.
+Login requires the exact name (including capitalization and spacing) and its matching password. The database stores password hashes rather than plaintext passwords. Change these sample credentials before sharing the site. To add a vet, generate a hash with `php -r "echo password_hash('newpass', PASSWORD_DEFAULT);"` and insert the vet's name and hash into the `vets` table.
 
 ## Run it in a GitHub Codespace
 
