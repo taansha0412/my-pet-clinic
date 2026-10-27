@@ -9,62 +9,69 @@
 </head>
 <body>
   <header class="top">
-    <h1>Paws and Care</h1>
+    <h1><a href="#" data-go="home">Paws and Care</a></h1>
     <div id="session"></div>
   </header>
 
   <p id="msg" role="status"></p>
 
   <main>
-    <section class="intro">
-      <h2>Care for your pet, booked in a minute</h2>
-      <p>Open Monday to Saturday, 9 am to 7 pm. Register, add your pet and pick a vet and a time.</p>
-      <h3>Our vets</h3>
-      <ul id="vets" class="plain"></ul>
+    <!-- Home: choose who you are -->
+    <section id="view-home">
+      <h2>Welcome to Paws and Care</h2>
+      <p>Choose how you want to continue.</p>
+      <div class="choices">
+        <button class="choice" data-go="owner"><strong>Pet owner</strong><span>Register your pet and get a visit time</span></button>
+        <button class="choice alt" data-go="vet"><strong>Vet</strong><span>Log in and manage waiting pets</span></button>
+      </div>
     </section>
 
-    <section id="guest" class="panel">
-      <h2>Log in or register</h2>
-      <form id="login-form">
-        <label>Email <input name="email" type="email" required></label>
-        <label>Password <input name="password" type="password" required></label>
-        <button type="submit">Log in</button>
-      </form>
-      <hr>
-      <form id="register-form">
-        <label>Your name <input name="name" required></label>
-        <label>Email <input name="email" type="email" required></label>
-        <label>Password (6+ characters) <input name="password" type="password" minlength="6" required></label>
-        <button type="submit" class="alt">Create account</button>
-      </form>
-    </section>
-
-    <div id="member" hidden>
-      <section class="panel">
-        <h2>My pets</h2>
-        <ul id="pets" class="plain"></ul>
+    <!-- Pet owner -->
+    <section id="view-owner" hidden>
+      <div class="panel">
+        <h2>Register your pet</h2>
         <form id="pet-form">
-          <label>Pet name <input name="name" required></label>
-          <label>Species <input name="species" placeholder="Dog, cat, rabbit" required></label>
-          <label>Breed <input name="breed"></label>
-          <label>Age in years <input name="age" type="number" min="0" max="40"></label>
-          <button type="submit">Add pet</button>
+          <label>Pet name <input name="pet_name" required maxlength="100"></label>
+          <label>Owner name <input name="owner_name" required maxlength="100"></label>
+          <button type="submit">Register</button>
         </form>
-      </section>
+      </div>
 
-      <section class="panel">
-        <h2>Book an appointment</h2>
-        <form id="appt-form">
-          <label>Pet <select name="pet_id" id="pet-select" required></select></label>
-          <label>Vet <select name="vet_id" id="vet-select" required></select></label>
-          <label>Date and time <input name="appt_time" type="datetime-local" required></label>
-          <label>Reason <input name="reason" placeholder="Vaccination, limping, checkup"></label>
-          <button type="submit">Book appointment</button>
+      <div class="panel">
+        <h2>Check your pet</h2>
+        <form id="status-form" class="inline">
+          <label>Pet ID <input name="id" type="number" min="1" required></label>
+          <button type="submit">Check</button>
         </form>
-        <h3>Upcoming visits</h3>
-        <ul id="appts" class="plain"></ul>
-      </section>
-    </div>
+        <div id="status-card" hidden></div>
+      </div>
+      <button class="link" data-go="home">Back to home</button>
+    </section>
+
+    <!-- Vet login -->
+    <section id="view-vet" hidden>
+      <div class="panel narrow">
+        <h2>Vet login</h2>
+        <form id="login-form">
+          <label>Name <input name="name" required autocomplete="username"></label>
+          <label>Password <input name="password" type="password" required autocomplete="current-password"></label>
+          <button type="submit">Log in</button>
+        </form>
+      </div>
+      <button class="link" data-go="home">Back to home</button>
+    </section>
+
+    <!-- Vet dashboard -->
+    <section id="view-dash" hidden>
+      <div class="panel">
+        <h2>Waiting for a time</h2>
+        <ul id="pending" class="plain"></ul>
+      </div>
+      <div class="panel">
+        <h2>Approved</h2>
+        <ul id="approved" class="plain"></ul>
+      </div>
+    </section>
   </main>
 
   <script src="app.js"></script>
