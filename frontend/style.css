@@ -3,27 +3,40 @@
   color-scheme: light;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; font: 400 1rem/1.55 "DM Sans", system-ui, sans-serif; color: var(--ink); background: var(--mist); }
-h1, h2, h3 { font-family: "Bricolage Grotesque", "DM Sans", sans-serif; line-height: 1.15; margin: 0 0 .6rem; }
+h1, h2 { font-family: "Bricolage Grotesque", "DM Sans", sans-serif; line-height: 1.15; margin: 0 0 .7rem; }
 h1 { font-weight: 800; font-size: 1.6rem; }
-h2 { font-size: 1.4rem; } h3 { font-size: 1.05rem; margin-top: 1.4rem; }
+h1 a { color: inherit; text-decoration: none; }
+h2 { font-size: 1.5rem; }
 .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem clamp(1rem, 4vw, 3rem); background: var(--ink); color: #fff; border-bottom: 4px solid var(--sun); }
 .top button { background: transparent; border: 1px solid #fff; color: #fff; padding: .35rem .8rem; }
-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 2rem; padding: 2rem clamp(1rem, 4vw, 3rem); max-width: 1100px; margin: 0 auto; }
-.intro p { max-width: 60ch; }
+main { max-width: 760px; margin: 0 auto; padding: 2rem clamp(1rem, 4vw, 2rem); }
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+.choice { display: grid; gap: .4rem; text-align: left; padding: 2rem 1.5rem; border-radius: 12px; background: var(--sea); color: #fff; font: inherit; border: 0; cursor: pointer; }
+.choice.alt { background: var(--ink); }
+.choice strong { font: 800 1.6rem "Bricolage Grotesque", sans-serif; }
 .panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; }
-.plain { list-style: none; padding: 0; margin: 0 0 1rem; }
-.plain li { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .55rem 0; border-bottom: 1px solid var(--line); }
+.panel.narrow { max-width: 420px; }
+.plain { list-style: none; padding: 0; margin: 0; }
+.plain li { display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.plain li:last-child { border-bottom: 0; }
 .plain small { color: #4c6b75; display: block; }
 form { display: grid; gap: .8rem; }
+form.inline { display: flex; align-items: end; gap: .75rem; flex-wrap: wrap; }
+form.inline label { flex: 1 1 140px; }
 label { display: grid; gap: .25rem; font-weight: 500; }
-input, select { font: inherit; padding: .55rem .65rem; border: 1px solid #8fb0b8; border-radius: 6px; background: #fff; color: var(--ink); }
+input { font: inherit; padding: .55rem .65rem; border: 1px solid #8fb0b8; border-radius: 6px; background: #fff; color: var(--ink); }
 button { font: 500 1rem "DM Sans", sans-serif; padding: .6rem 1rem; border: 0; border-radius: 6px; background: var(--sea); color: #fff; cursor: pointer; }
-button.alt { background: var(--ink); }
-button.danger { background: transparent; color: var(--alert); border: 1px solid var(--alert); padding: .25rem .6rem; }
+button.link { background: none; color: var(--sea); padding: .3rem 0; text-decoration: underline; }
+.approve { display: flex; gap: .5rem; flex-wrap: wrap; }
+.approve input { padding: .4rem .5rem; }
+.approve button { padding: .4rem .8rem; }
+.card { margin-top: 1rem; padding: 1rem; border-radius: 8px; background: var(--mist); border-left: 5px solid var(--sun); }
+.card.done { border-left-color: var(--sea); }
+.card .big { font: 800 2rem "Bricolage Grotesque", sans-serif; }
 :focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
-hr { border: 0; border-top: 1px solid var(--line); margin: 1.25rem 0; }
-#msg { margin: 0; padding: 0 clamp(1rem, 4vw, 3rem); color: var(--alert); font-weight: 500; min-height: 0; }
+#msg { margin: 0; padding: 0 clamp(1rem, 4vw, 3rem); color: var(--alert); font-weight: 500; }
 #msg:not(:empty) { padding-top: .8rem; }
 #msg.ok { color: var(--sea); }
-@media (max-width: 760px) { main { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .choices { grid-template-columns: 1fr; } }
