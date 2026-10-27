@@ -5,42 +5,31 @@ CREATE USER IF NOT EXISTS 'petuser'@'%' IDENTIFIED BY 'petpass';
 GRANT ALL PRIVILEGES ON pet_clinic.* TO 'petuser'@'%';
 FLUSH PRIVILEGES;
 
-CREATE TABLE IF NOT EXISTS users (
+-- Remove tables from the earlier version so this file can be run again safely
+DROP TABLE IF EXISTS appointments;
+DROP TABLE IF EXISTS pets;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS vets;
+
+CREATE TABLE vets (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(150) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  name VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS pets (
+CREATE TABLE pets (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  owner_id INT NOT NULL,
-  name VARCHAR(100) NOT NULL,
-  species VARCHAR(50) NOT NULL,
-  breed VARCHAR(100),
-  age INT,
-  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+  pet_name VARCHAR(100) NOT NULL,
+  owner_name VARCHAR(100) NOT NULL,
+  status ENUM('pending','approved') NOT NULL DEFAULT 'pending',
+  appt_time DATETIME NULL,
+  approved_by INT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY vet_slot (approved_by, appt_time),
+  FOREIGN KEY (approved_by) REFERENCES vets(id)
 );
 
-CREATE TABLE IF NOT EXISTS vets (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  specialty VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS appointments (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  pet_id INT NOT NULL,
-  vet_id INT NOT NULL,
-  appt_time DATETIME NOT NULL,
-  reason VARCHAR(255),
-  UNIQUE KEY vet_slot (vet_id, appt_time),
-  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
-  FOREIGN KEY (vet_id) REFERENCES vets(id)
-);
-
-INSERT INTO vets (name, specialty) VALUES
-  ('Dr. Meera Shah', 'General care'),
-  ('Dr. Arjun Rao', 'Surgery'),
-  ('Dr. Nisha Patel', 'Dermatology');
+-- Sample vets. Passwords: meera123 and arjun123
+INSERT INTO vets (name, password_hash) VALUES
+  ('Meera', '$2y$12$aiV50nSkIeV5cADWCdvfG.SEqKYG3qzJUz4cWBdwXLlm0BOD4.LE6'),
+  ('Arjun', '$2y$12$CoHF/AKUV/llmBYoH1dB5.y7JZjzhhoDwNf8XnBm2QY4xEOQP2rF.');
