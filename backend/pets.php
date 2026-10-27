@@ -1,28 +1,24 @@
 <?php
+// Pet owner side: register a pet (POST) and check its status by ID (GET).
 require 'config.php';
-$uid = need_login();
 $method = $_SERVER['REQUEST_METHOD'];
-
-if ($method === 'GET') {
-    $st = db()->prepare('SELECT id, name, species, breed, age FROM pets WHERE owner_id = ? ORDER BY name');
-    $st->execute([$uid]);
-    out($st->fetchAll());
-}
 
 if ($method === 'POST') {
     $b = body();
-    $name = trim($b['name'] ?? '');
-    $species = trim($b['species'] ?? '');
-    if ($name === '' || $species === '') out(['error' => 'Pet name and species are required'], 400);
-    $age = ($b['age'] ?? '') === '' ? null : (int)$b['age'];
-    db()->prepare('INSERT INTO pets (owner_id, name, species, breed, age) VALUES (?, ?, ?, ?, ?)')
-        ->execute([$uid, $name, $species, trim($b['breed'] ?? ''), $age]);
+    $pet = trim($b['pet_name'] ?? '');
+    $owner = trim($b['owner_name'] ?? '');
+    if ($pet === '' || $owner === '' || strlen($pet) > 100 || strlen($owner) > 100)
+        out(['error' => 'Enter both the pet name and the owner name'], 400);
+    db()->prepare('INSERT INTO pets (pet_name, owner_name) VALUES (?, ?)')->execute([$pet, $owner]);
     out(['id' => (int)db()->lastInsertId()], 201);
 }
 
-if ($method === 'DELETE') {
-    db()->prepare('DELETE FROM pets WHERE id = ? AND owner_id = ?')->execute([(int)($_GET['id'] ?? 0), $uid]);
-    out(['ok' => true]);
+if ($method === 'GET') {
+    $st = db()->prepare('SELECT id, pet_name, owner_name, status, appt_time FROM pets WHERE id = ?');
+    $st->execute([(int)($_GET['id'] ?? 0)]);
+    $row = $st->fetch();
+    if (!$row) out(['error' => 'No pet found with that ID'], 404);
+    out($row);
 }
 
 out(['error' => 'Method not allowed'], 405);
